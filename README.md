@@ -1,8 +1,42 @@
 # Backend-API
+Hiya! Gabriel here, this repo is for the backend of the app (ai model not included). Some of the features :  
+- Auth
+- Article
+- Forum
+- Image resizer
+- Comment system
+
+## how to use  
+install the requirements
+```bash
+pip install -r requirements.txt
+```
+boot uvicorn
+```bash
+uvicorn main:app
+```
+or
+```bash
+python3 -m uvicorn main:app
+```
+ENV list
+```
+> PORT
+> cres (service account for cloud storage)
+> secret
+> algorithm
+> dbase
+> duser
+> dpw
+> dip
+```
+
+
+  
 # side-API
-**Api things in case I forgot**
+**Development notes**
 here me testing before making the api,
-before that the sql relation will look like this :
+before that the sql relation will look like this :  
 ![enter image description here](https://cdn.discordapp.com/attachments/1023598916857499680/1106228887899357225/image.png)  
 So we got 3 tables in total to make: users, article, comps
 in article we have 5 parameters:
