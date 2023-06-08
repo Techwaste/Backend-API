@@ -1,10 +1,13 @@
 import mysql.connector
+from decouple import config
+from dotenv import load_dotenv
+import os
 
-
-dbase = config("dbase")
-duser = config("duser")
-dpw = config("dpw")
-dip = config("dip")
+load_dotenv()
+dbase = os.getenv("dbase")
+duser = os.getenv("duser")
+dpw = os.getenv("dpw")
+dip = os.getenv("dip")
 
 # Define a function to open database connection
 def open_db_connection(db_name, user, password, host):
