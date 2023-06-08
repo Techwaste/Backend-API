@@ -25,7 +25,7 @@ with open("service_account.json", "w") as file:
     file.write(key_pi)
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./service_account.json"
 form = str(random.randint(3, 3265792139879102375))
-bucketName = "techpybarahh"
+bucketName = "techwaste"
 
 
 
@@ -460,7 +460,7 @@ async def posting(request: Request,file: UploadFile = File(...)):
     image.save(file.filename)
     
     storage_thingy("savedUser/"+"image"+savedForm+"USED"+token2, file.filename, bucketName)
-    saved = "https://storage.googleapis.com/techpybarahh/savedUser/"+"image"+savedForm+"USED"+token2
+    saved = "https://storage.googleapis.com/techwaste/savedUser/"+"image"+savedForm+"USED"+token2
     os.remove(file.filename)
 
     if (saved):
