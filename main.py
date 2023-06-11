@@ -110,7 +110,7 @@ def get_one_post(id:int):
 
 
 
-@app.get("/component/{id}", dependencies=[Depends(jwtBearer())], tags=["components"])
+@app.get("/component/{id}", tags=["components"])
 def comps(id: str):
     result = getbyId(id)
     return {
@@ -121,7 +121,7 @@ def comps(id: str):
 
 
 
-@app.get("/article/{id}", dependencies=[Depends(jwtBearer())], tags=["articles"])
+@app.get("/article/{id}", tags=["articles"])
 def artic(compid: str):
     result = getArticlebyId(compid)
     return {
