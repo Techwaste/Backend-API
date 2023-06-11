@@ -17,6 +17,7 @@ import json
 import jwt
 import os
 import io
+import numpy as np
 
 def decode_user(token2):
     decoded_data = jwt.decode(token2,JWT_SECRET,JWT_ALGORITHM)
@@ -537,3 +538,62 @@ def postForum(forum: ForumSchema,email):
     "error":"false",
     "message":"your post has been posted 😱🥶🥶🥶🥶🥶🥶🥶"
   }
+
+
+
+
+
+#LIKE SYSTEM
+
+def convert_string_to_array(input_string):
+    # Check if input_string is None
+    if input_string is None:
+        return np.array([])  # Return an empty array if input_string is None
+    
+    # Remove the brackets from the string
+    input_string = input_string.strip('[]')
+    # Split the string into individual numbers
+    numbers = input_string.split()
+    # Convert the numbers from strings to integers using NumPy
+    array = np.array(numbers, dtype=int)
+    return array
+
+def convert_array_to_string(array):
+    # Check if array is None
+    if array is None:
+        return ""  # Return an empty string if array is None
+    
+    # Convert the array elements to strings
+    string_elements = [str(element) for element in array]
+    # Join the elements with spaces
+    string_representation = " ".join(string_elements)
+    # Add brackets around the string
+    string_representation = "[" + string_representation + "]"
+    return string_representation
+
+def is_value_present(array, value):
+    # Check if value is already in the array
+    return np.isin(value, array)
+
+def check_value_status(input_string, value_to_check):
+    array = convert_string_to_array(input_string)
+    
+    if is_value_present(array, value_to_check):
+        return True
+    else:
+        return False
+
+def add_value_to_array(input_string, value_to_push):
+    array = convert_string_to_array(input_string)
+    
+    if is_value_present(array, value_to_push):
+        return "already liked"
+    else:
+        if array.size == 0:
+            result_array_pushed = np.array([value_to_push])
+        else:
+            # Push the value into the array
+            result_array_pushed = np.append(array, value_to_push)
+        
+        result_string_pushed = convert_array_to_string(result_array_pushed)
+        return result_string_pushed
