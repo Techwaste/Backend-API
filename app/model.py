@@ -1,13 +1,5 @@
 from pydantic import BaseModel, Field, EmailStr
 
-# config = {
-#   'user': 'root',
-#   'password': "J]91kx6G&S:^]'Gu",
-#   'host': '34.69.199.102',
-#   'database': 'component',
-#   'raise_on_warnings': True
-# }
-
 class PostSchema(BaseModel):
     id : int = Field(default=None)
     title : str = Field(default=None)
