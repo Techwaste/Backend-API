@@ -35,18 +35,6 @@ ENV list
 
 # Api Documentation
 
-# api documentation v0.0.2
-
-yahoo~! How are ya? I hope you guys doing well, and hopefully find love among this cruel world! Because as an old wise man once said: 
-
-"**one would most be thought to love a person if one wishes that he should exist, for his sake and not one's own, even if one doesn't confer goods on him, let alone existence**."   
--Aristotle
-
-what about me you may ask!?
-my reaction to that question :  
-![me frfr](https://media.tenor.com/6sC2tvkCiU0AAAAC/micha%C5%82-micha%C5%82po-nesquicku.gif)
-
-anyways due to some technical issues (my brain and my low iq), I managed to fix the api and here's the updated version of the documentation:
 ### REGISTER
 
 - URL
