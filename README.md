@@ -265,7 +265,7 @@ name * = string
   ]
 }
 ```
-
+*For more Docs (contains sensitive data) add /docs at the end of the url*
   
 # Development notes
 **DISCLAIMER:  some of the logs here are from my / past organization's api logs.** 
