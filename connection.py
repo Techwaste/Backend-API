@@ -1,4 +1,5 @@
 import mysql.connector
+from google.cloud.sql.connector import connector
 from decouple import config
 from dotenv import load_dotenv
 import os
@@ -7,16 +8,21 @@ load_dotenv()
 dbase = os.getenv("dbase")
 duser = os.getenv("duser")
 dpw = os.getenv("dpw")
-dip = os.environ[
-        "INSTANCE_UNIX_SOCKET"
-    ]
+# Replace dip with your instance connection name
+dip = os.getenv("dip")
 
 # Define a function to open database connection
-def open_db_connection(db_name, user, password, host):
+def open_db_connection(db_name, user, password):
     # Try to connect to the database
     try:
-        # Create a connection object with the name mydb
-        mydb = mysql.connector.connect(database=db_name, user=user, password=password, host=host)
+        # Create a connection object using the connector.connect function
+        mydb = connector.connect(
+            dip,
+            user,
+            password,
+            db_name,
+            enable_iam_auth=True
+        )
         # Print a success message
         print("Opened connection to database:", db_name)
         # Return the connection object
@@ -50,7 +56,6 @@ def defineDB():
        dbase,
        duser,
        dpw,
-       dip,
    )
    return mydb
 
