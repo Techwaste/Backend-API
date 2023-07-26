@@ -1,5 +1,4 @@
-import mysql.connector
-from google.cloud.sql.connector import connector
+from google.cloud.sql import connector
 from decouple import config
 from dotenv import load_dotenv
 import os
@@ -28,7 +27,7 @@ def open_db_connection(db_name, user, password):
         # Return the connection object
         return mydb
     # Handle any exceptions
-    except mysql.connector.Error as e:
+    except Exception as e:
         # Print an error message
         print("Failed to open connection to database:", e)
         # Return None
@@ -45,7 +44,7 @@ def close_db_connection(mydb, db_name):
             # Print a success message
             print("Closed connection to database:", db_name)
         # Handle any exceptions
-        except mysql.connector.Error as e:
+        except Exception as e:
             # Print an error message
             print("Failed to close connection to database:", e)
 
