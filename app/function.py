@@ -26,6 +26,12 @@ def decode_user(token2):
 #function.py
 def searchUserById(id):
   mydb=defineDB()
+  if mydb is None:
+        # Raise an error or log a message
+        raise RuntimeError("Failed to create database connection")
+        # Or
+        print("Failed to create database connection")
+        return None
   mycursor = mydb.cursor()
   values = (id,)
   mycursor.execute("SELECT * FROM users2 WHERE id= %s", values)
