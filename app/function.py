@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 from connection import *
 from app.model import *
 from io import BytesIO
-import mysql.connector
+from google.cloud.sql import connector
 from app.function import *
 from PIL import Image
 import requests
