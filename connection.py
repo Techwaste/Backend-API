@@ -7,7 +7,9 @@ load_dotenv()
 dbase = os.getenv("dbase")
 duser = os.getenv("duser")
 dpw = os.getenv("dpw")
-dip = os.getenv("dip")
+dip = os.environ[
+        "INSTANCE_UNIX_SOCKET"
+    ]
 
 # Define a function to open database connection
 def open_db_connection(db_name, user, password, host):
