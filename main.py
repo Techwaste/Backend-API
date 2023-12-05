@@ -18,15 +18,20 @@ import jwt
 import os
 import io
 
-load_dotenv()
-key_pi = os.getenv("cres")
+use_env = os.environ.get("USE_ENV")
+
+if use_env != "True":
+    load_dotenv()
+    key_pi = os.getenv("SA_JSON")
+else:
+    key_pi = os.environ.get("SA_JSON")
+
 # GOOGLE_APPLICATION_CREDENTIALS = key_pi
 with open("service_account.json", "w") as file:
     file.write(key_pi)
 os.environ["GOOGLE_APPLICATION_CREDENTIALS"] = "./service_account.json"
 form = str(random.randint(3, 3265792139879102375))
 bucketName = "techwaste"
-
 
 
 def storage_thingy(blobName, filePath, bucketName):
@@ -43,22 +48,23 @@ def storage_thingy(blobName, filePath, bucketName):
 
 token = []
 
+
 async def testcoded(request: Request):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
     return decode_user(token2)
 
-def decode_user(token2):
-    decoded_data = jwt.decode(token2,JWT_SECRET,JWT_ALGORITHM)
-    return decoded_data
 
+def decode_user(token2):
+    decoded_data = jwt.decode(token2, JWT_SECRET, JWT_ALGORITHM)
+    return decoded_data
 
 
 posts = [
     {
         "id": 1,
         "title": "rent-a-gf",
-        "text":"stupid *ss anime only psychopath watch this"
+        "text": "stupid *ss anime only psychopath watch this"
 
     },
     {
@@ -69,8 +75,8 @@ posts = [
     },
     {
         "id": 3,
-        "title":"demon-slayer",
-        "text":"overrated af and also it's the equivalent of fortnite in anime industry (only 5 yolds love it)"
+        "title": "demon-slayer",
+        "text": "overrated af and also it's the equivalent of fortnite in anime industry (only 5 yolds love it)"
 
     }
 
@@ -86,57 +92,57 @@ app = FastAPI()
 # Get test
 @app.get("/", tags=["test"])
 def greet():
-    return{"YAHOOOOO~!":"THE PROPECHY STIGNEAS!"}
+    return {"YAHOOOOO~!": "THE PROPECHY STIGNEAS!"}
 
 
 # Get posts
 @app.get("/posts", tags=["posts"])
 def get_posts():
-    return{"data": posts}
+    return {"data": posts}
 
 # get single post by id
+
+
 @app.get("/post/{id}", tags=["posts"])
-def get_one_post(id:int):
+def get_one_post(id: int):
     if id > len(posts):
-        return{
-            "error":"erm, there is no post..."
+        return {
+            "error": "erm, there is no post..."
         }
     for post in posts:
-        if post["id"]==id:
+        if post["id"] == id:
             return {
-                "data":post
+                "data": post
             }
-        
-
 
 
 @app.get("/component/{id}", tags=["components"])
 def comps(id: str):
     result = getbyId(id)
     return {
-        "error":"false",
-        "message":"success",
-        "componentList":result
+        "error": "false",
+        "message": "success",
+        "componentList": result
     }
-
 
 
 @app.get("/article/{id}", tags=["articles"])
 def artic(compid: str):
     result = getArticlebyId(compid)
     return {
-        "error":"false",
-        "message":"success",
-        "articleList":result
+        "error": "false",
+        "message": "success",
+        "articleList": result
     }
+
 
 @app.get("/allArticle", tags=["articles"])
 def compsed():
     result = getAllArticleby()
     return {
-        "error":"false",
-        "message":"success",
-        "componentList":result
+        "error": "false",
+        "message": "success",
+        "componentList": result
     }
 
 
@@ -145,36 +151,32 @@ def compsed():
 def add_post(post: PostSchema):
     post.id = len(posts)+1
     posts.append(post.dict())
-    return{
-        "info":"degenericity added"
+    return {
+        "info": "degenericity added"
     }
 
 # User thingy I forgor basically
-#@app.post("/user/signup", tags=["user"])
-#def user_signup(user : UserSchema = Body(...)):
+# @app.post("/user/signup", tags=["user"])
+# def user_signup(user : UserSchema = Body(...)):
 #    users.append(user)
 #    return signJWT(user.email)
 
 
-
 @app.post("/user/signup", tags=["user"])
-def user_signup(user : UserSchema = Body(...)):
+def user_signup(user: UserSchema = Body(...)):
     users.append(user)
 
     if pushUser(user):
         return {
-            "error":"false",
-            "message":"User Created",
-            "signupToken":signJWT(user.email)
-            }
-    else:
-        return{
-            "error":"true",
-            "message":"Email already taken 🗿"
+            "error": "false",
+            "message": "User Created",
+            "signupToken": signJWT(user.email)
         }
-
-
-
+    else:
+        return {
+            "error": "true",
+            "message": "Email already taken 🗿"
+        }
 
 
 @app.post("/user/login", tags=["user"])
@@ -184,38 +186,37 @@ def user_login(user: UserLoginSchema = Body(...)):
         nanikore = signJWT(user.email)
         token.append(nanikore)
         return {
-            "error":"false",
-            "message":"login success",
-            "loginResult":{
-            "userId":getCreden(user),
-            "token":nanikore,
+            "error": "false",
+            "message": "login success",
+            "loginResult": {
+                "userId": getCreden(user),
+                "token": nanikore,
             }}
 
     else:
-        return{
-            "error":"true",
-            "message":"Invalid login details! 🗿"
+        return {
+            "error": "true",
+            "message": "Invalid login details! 🗿"
         }
+
 
 async def testcoded(request: Request):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
-    return {"hasil":token2,
-            "test-token":decode_user(token2)}
-
-
+    return {"hasil": token2,
+            "test-token": decode_user(token2)}
 
 
 @app.get("/meneh", dependencies=[Depends(jwtBearer())], tags=["test"])
 def coba():
-    wibu=decode_user()
-    email=wibu["userID"]
+    wibu = decode_user()
+    email = wibu["userID"]
     return email
+
 
 @app.post("/forum/postest", dependencies=[Depends(jwtBearer())], tags=["forum"])
 def posting(forum: ForumSchema = Body(...)):
     return postForumtest(forum)
-    
 
 
 @app.get("/forum/getall", tags=["forum"])
@@ -223,30 +224,31 @@ def forumGetAll():
 
     forum = getAllForum()
     if (forum):
-        return{
-            "error":"false",
-            "message":"success",
-            "forum":forum
+        return {
+            "error": "false",
+            "message": "success",
+            "forum": forum
         }
     else:
-        return{
-            "error":"true",
-            "message":"it's either no forum or you wanna do something terrible 💀"
+        return {
+            "error": "true",
+            "message": "it's either no forum or you wanna do something terrible 💀"
         }
-    
+
+
 @app.get("/forum/id/{id}", dependencies=[Depends(jwtBearer())], tags=["forum"])
 def forid(id):
     result = getForumById(id)
-    if(result):
+    if (result):
         return {
-            "error":"false",
-            "message":"success",
-            "forum":result
+            "error": "false",
+            "message": "success",
+            "forum": result
         }
     else:
         return {
-            "error":"true",
-            "message":"are you serious rait now braw 💀"
+            "error": "true",
+            "message": "are you serious rait now braw 💀"
         }
 
 
@@ -254,15 +256,15 @@ def forid(id):
 def forumCategory(category):
     forum = getForumByCategory(category)
     if (forum):
-        return{
-            "error":"false",
-            "message":"success",
-            "forum":forum
+        return {
+            "error": "false",
+            "message": "success",
+            "forum": forum
         }
     else:
-        return{
-            "error":"true",
-            "message":"it's either there's no forum for this category or you wanna do something terrible 💀"
+        return {
+            "error": "true",
+            "message": "it's either there's no forum for this category or you wanna do something terrible 💀"
         }
 
 
@@ -271,209 +273,195 @@ async def testcoded(request: Request):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
     jsonResponse = decode_user(token2)
-    return(jsonResponse["userID"])
+    print(jsonResponse)
+    return (jsonResponse["userID"])
 
 
 @app.get("/components/", tags=["components"])
 def getAllComp():
     output = getAllComponents()
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "components":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "components": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
+
+
 @app.get("/forum/title/{title}", tags=["forum"])
 def getForumbyName(title):
     output = getForumName(title)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "Forum":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "Forum": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
+
 
 @app.get("/article/name/{name}", tags=["articles"])
 def getArticlebyName(name):
     output = getArticleName(name)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "article":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "article": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
-
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
 
 
 @app.get("/article/id/{id}", tags=["articles"])
 def getArticlebyName(id):
     output = getArticleID2(id)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "article":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "article": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-
-
-
-
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
 
 
 @app.post("/forum/post", dependencies=[Depends(jwtBearer())], tags=["forum"])
-def posting(request: Request,forum: ForumSchema = Body(...)):
+def posting(request: Request, forum: ForumSchema = Body(...)):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
-    jsonResponse=decode_user(token2)
-    email=jsonResponse["userID"]
-    
-    postForum(forum,email)
+    jsonResponse = decode_user(token2)
+    email = jsonResponse["userID"]
+
+    postForum(forum, email)
     if (forum):
-        return{
-            "error":"false",
-            "message":"your post has been posted 😱🥶🥶🥶🥶🥶🥶🥶"
+        return {
+            "error": "false",
+            "message": "your post has been posted 😱🥶🥶🥶🥶🥶🥶🥶"
 
         }
     else:
-        return{
-            "error":"true",
-            "message":"what are you trying to do lil bro 💀"
+        return {
+            "error": "true",
+            "message": "what are you trying to do lil bro 💀"
 
         }
 
-@app.post("/comments/post", dependencies=[Depends(jwtBearer())],tags=["comments"])
-def postComments(request: Request,post: CommentSchema = Body(...)):
+
+@app.post("/comments/post", dependencies=[Depends(jwtBearer())], tags=["comments"])
+def postComments(request: Request, post: CommentSchema = Body(...)):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
-    jsonResponse=decode_user(token2)
-    email=jsonResponse["userID"]
+    jsonResponse = decode_user(token2)
+    email = jsonResponse["userID"]
     if (post):
-        return postComment(post,email)
-
-
-
-
+        return postComment(post, email)
 
 
 @app.get("/comments/byforumid/{forumid}", tags=["comments"])
 def getCommentsbyForumId(forumid):
     output = getCommentForum(forumid)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "article":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "article": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
 
 
-
-
-
-
-@app.post("/reply/post",dependencies=[Depends(jwtBearer())], tags=["comments"])
-def replyCommentID(request: Request,post: ReplySchema = Body(...)):
+@app.post("/reply/post", dependencies=[Depends(jwtBearer())], tags=["comments"])
+def replyCommentID(request: Request, post: ReplySchema = Body(...)):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
-    jsonResponse=decode_user(token2)
-    email=jsonResponse["userID"]
+    jsonResponse = decode_user(token2)
+    email = jsonResponse["userID"]
     if (post):
-        return replybyCommentID(post,email)
-    
-
+        return replybyCommentID(post, email)
 
 
 @app.get("/smallparts/bycompid/{compid}", tags=["components"])
 def getsmallpartsbycompid(compid):
     output = getSmallPartsComp(compid)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "smallParts":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "smallParts": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
-
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
 
 
 @app.get("/smallparts/byid/{id}", tags=["components"])
 def getsmallpartsbycompid(id):
     output = getSmallPartsComp(id)
-    if(output):
-            return{
-            "error":"false",
-            "message":"success",
-            "smallParts":output
-            }
+    if (output):
+        return {
+            "error": "false",
+            "message": "success",
+            "smallParts": output
+        }
     else:
-            return{
-            "error":"true",
-            "message":"waduh kenapa nih bang?"
-            }
-    
+        return {
+            "error": "true",
+            "message": "waduh kenapa nih bang?"
+        }
+
 
 @app.post("/forum/upimagepost", dependencies=[Depends(jwtBearer())], tags=["forum"])
-async def posting(request: Request,file: UploadFile = File(...)):
+async def posting(request: Request, file: UploadFile = File(...)):
     authorization_header = request.headers["Authorization"]
     token2 = authorization_header.split(" ")[1]
 
     savedForm = form
-    extension = file.filename.split(".")[-1] in ("jpg", "jpeg","png")
+    extension = file.filename.split(".")[-1] in ("jpg", "jpeg", "png")
     if not extension:
         return "Image must be jpg, jpeg, or png format!"
     contents = await file.read()
 
     image = Image.open(io.BytesIO(contents))
     image.save(file.filename)
-    
-    storage_thingy("savedUser/"+"image"+savedForm+"USED"+token2, file.filename, bucketName)
-    saved = "https://storage.googleapis.com/techwaste/savedUser/"+"image"+savedForm+"USED"+token2
+
+    storage_thingy("savedUser/"+"image"+savedForm+"USED" +
+                   token2, file.filename, bucketName)
+    saved = "https://storage.googleapis.com/techwaste/savedUser/" + \
+        "image"+savedForm+"USED"+token2
     os.remove(file.filename)
 
     if (saved):
-        return{
-            "error":"false",
-            "message":"your image has been posted 😱🥶🥶🥶🥶🥶🥶🥶",
-            "imgURL":saved
+        return {
+            "error": "false",
+            "message": "your image has been posted 😱🥶🥶🥶🥶🥶🥶🥶",
+            "imgURL": saved
 
         }
     else:
-        return{
-            "error":"true",
-            "message":"what are you trying to do lil bro 💀"
+        return {
+            "error": "true",
+            "message": "what are you trying to do lil bro 💀"
 
         }
 
@@ -492,12 +480,13 @@ async def posting(request: Request,file: UploadFile = File(...)):
 
 #     return {"message": "Image resized and saved successfully.", "file_path": output_path}
 
-@app.get("/resize/imageurl",tags=["image"])
+
+@app.get("/resize/imageurl", tags=["image"])
 async def resize_image(
-    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg", 
-    width: int = 300, 
+    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg",
+    width: int = 300,
     height: int = 300
-    ):
+):
     # Fetch the image from the provided URL
     response = requests.get(image_url)
     response.raise_for_status()
@@ -515,12 +504,13 @@ async def resize_image(
     # return {"message": "Image resized and saved successfully.", "file_path": output_path}
     return FileResponse(output_path)
 
-@app.get("/crop/imageurl",tags=["image"])
+
+@app.get("/crop/imageurl", tags=["image"])
 async def crop_image(
-    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg", 
-    width: int = 300, 
+    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg",
+    width: int = 300,
     height: int = 300
-    ):
+):
     # Fetch the image from the provided URL
     response = requests.get(image_url)
     response.raise_for_status()
@@ -553,12 +543,13 @@ async def crop_image(
     # Return the image as a response
     return FileResponse(output_path)
 
-@app.get("/crop2/imageurl",tags=["image"])
+
+@app.get("/crop2/imageurl", tags=["image"])
 async def crop_image2(
-    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg", 
-    width: int = 300, 
+    image_url: str = "https://storage.googleapis.com/somethingssss/PXL_20230203_102403556.jpg",
+    width: int = 300,
     height: int = 300
-    ):
+):
     # Fetch the image from the provided URL
     response = requests.get(image_url)
     response.raise_for_status()
@@ -584,7 +575,8 @@ async def crop_image2(
     canvas = Image.new("RGB", (width, height), "white")
 
     # Paste the resized image onto the canvas
-    offset = ((width - resized_image.width) // 2, (height - resized_image.height) // 2)
+    offset = ((width - resized_image.width) // 2,
+              (height - resized_image.height) // 2)
     canvas.paste(resized_image, offset)
 
     # Save the canvas to a BytesIO buffer
@@ -594,7 +586,6 @@ async def crop_image2(
 
     # Return the image as a response
     return FileResponse(output_path)
-
 
 
 if __name__ == "__main__":

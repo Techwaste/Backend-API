@@ -3,11 +3,22 @@ from decouple import config
 from dotenv import load_dotenv
 import os
 
-load_dotenv()
-dbase = os.getenv("dbase")
-duser = os.getenv("duser")
-dpw = os.getenv("dpw")
-dip = os.getenv("dip")
+# check if USE_ENV is set to True
+use_env = os.environ.get("USE_ENV")
+
+if use_env != "True":
+    load_dotenv()
+    dbase = os.getenv("DBASE")
+    duser = os.getenv("DUSER")
+    dpw = os.getenv("DPASS")
+    dip = os.getenv("DHOST")
+else:
+    # load environment variables instead of .env file
+    dbase = os.environ.get("DBASE")
+    duser = os.environ.get("DUSER")
+    dpw = os.environ.get("DPASS")
+    dip = os.environ.get("DHOST")
+
 
 # Define a function to open database connection
 def open_db_connection(db_name, user, password, host):
@@ -27,7 +38,7 @@ def open_db_connection(db_name, user, password, host):
         return None
 
 # Define a function to close database connection
-def close_db_connection(mydb, db_name):
+def close_db_connection(mydb, db_name=dbase):
     # Check if the connection object exists
     if mydb:
         # Try to close the connection
