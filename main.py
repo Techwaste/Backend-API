@@ -417,7 +417,7 @@ def getsmallpartsbycompid(compid):
 
 @app.get("/smallparts/byid/{id}", tags=["components"])
 def getsmallpartsbycompid(id):
-    output = getSmallPartsComp(id)
+    output = getSmallParts(id)
     if (output):
         return {
             "error": "false",
