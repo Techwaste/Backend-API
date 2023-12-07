@@ -494,7 +494,7 @@ def getSmallPartsComp(compid):
     return smallParts
 
 
-def getSmallPartsComp(id):
+def getSmallParts(id):
     mydb = defineDB()
     values = (id,)
     mycursor = mydb.cursor()
